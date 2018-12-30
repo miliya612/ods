@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"hash/fnv"
+	"strings"
 )
 
 func Max(a, b int) int {
@@ -13,10 +14,17 @@ func Max(a, b int) int {
 }
 
 type HashCodeFunc func(interface{}) uint64
+type CompareFunc func(interface{}, interface{}) int
 
-var hcs =  make(map[string]HashCodeFunc)
+var hcfs = make(map[string]HashCodeFunc)
+var cfs = make(map[string]CompareFunc)
 
 func init() {
+	initHashCode()
+	initCompare()
+}
+
+func initHashCode() {
 	intHash := func(x interface{}) uint64 {
 		v := x.(int)
 		return uint64(v)
@@ -27,22 +35,58 @@ func init() {
 		return h.Sum64()
 	}
 
-	hcs["int"] = intHash
-	hcs["int32"] = intHash
-	hcs["int64"] = intHash
-	hcs["uint"] = intHash
-	hcs["uint32"] = intHash
-	hcs["uint64"] = intHash
-	hcs["rune"] = intHash
-	hcs["string"] = stringHash
+	hcfs["int"] = intHash
+	hcfs["int32"] = intHash
+	hcfs["int64"] = intHash
+	hcfs["uint"] = intHash
+	hcfs["uint32"] = intHash
+	hcfs["uint64"] = intHash
+	hcfs["rune"] = intHash
+	hcfs["string"] = stringHash
 }
 
 func HashCode(v interface{}) uint64 {
 	t := fmt.Sprintf("%T", v)
-	f, ok := hcs[t]
+	f, ok := hcfs[t]
 	if !ok {
 		panic("unsupported type")
 	}
 	return f(v)
+}
 
+func initCompare() {
+	intCompare := func(a, b interface{}) int {
+		if a == b {
+			return 0
+		}
+		if a.(int) > b.(int) {
+			return 1
+		}
+		return -1
+	}
+	stringCompare := func(a, b interface{}) int {
+		return strings.Compare(a.(string), b.(string))
+	}
+
+	cfs["int"] = intCompare
+	cfs["int32"] = intCompare
+	cfs["int64"] = intCompare
+	cfs["uint"] = intCompare
+	cfs["uint32"] = intCompare
+	cfs["uint64"] = intCompare
+	cfs["rune"] = intCompare
+	cfs["string"] = stringCompare
+}
+
+func Compare(a, b interface{}) int {
+	t := fmt.Sprintf("%T", a)
+	u := fmt.Sprintf("%T", b)
+	if t != u {
+		panic(fmt.Sprintf("args types are not matched: %T, %T", a, b))
+	}
+	f, ok := cfs[t]
+	if !ok {
+		panic("unsupported type")
+	}
+	return f(a, b)
 }
