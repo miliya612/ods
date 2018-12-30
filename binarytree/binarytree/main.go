@@ -1,5 +1,7 @@
 package binarytree
 
+import "github.com/miliya612/ods/arraylist/arraydeque"
+
 type node struct {
 	left, right, parent *node
 }
@@ -46,4 +48,18 @@ func (bt BinaryTree) Traverse() {
 	(bt.r).recTraverse()
 }
 
-
+func (bt BinaryTree) BFTraverse() {
+	var q arraydeque.ArrayDeque
+	if bt.r != nil {
+		q.Add(q.Size(), bt.r)
+	}
+	for q.Size() > 0 {
+		n := q.Remove(q.Size()-1).(*node)
+		if n.left != nil {
+			q.Add(q.Size(), n.left)
+		}
+		if n.right != nil {
+			q.Add(q.Size(), n.right)
+		}
+	}
+}
