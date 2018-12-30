@@ -5,8 +5,8 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	if ret := New().len; ret != 0 {
-		t.Errorf("ChainedHashTable.New().len = %v", ret)
+	if ret := NewCHT().len; ret != 0 {
+		t.Errorf("ChainedHashTable.NewCHT().len = %v", ret)
 	}
 }
 
@@ -18,7 +18,7 @@ func TestAdd(t *testing.T) {
 		expectFail bool
 	}{
 		"add new elements": {
-			cht: *New(),
+			cht: *NewCHT(),
 			index: 10,
 			want: 10,
 			expectFail: false,
@@ -51,7 +51,7 @@ func TestAdd(t *testing.T) {
 
 func TestFind(t *testing.T) {
 	n := 10
-	cht := New()
+	cht := NewCHT()
 
 	for i := 0; i < n; i++ {
 		ret := cht.Find(i)
@@ -76,7 +76,7 @@ func TestFind(t *testing.T) {
 
 func TestRemove(t *testing.T) {
 	x := 12345
-	cht := New()
+	cht := NewCHT()
 
 	if cht.Remove(x) == true {
 		t.Errorf("Add returned true unexpectedly")
@@ -93,7 +93,7 @@ func TestRemove(t *testing.T) {
 }
 
 func dummyChainedHashTable(n int) *ChainedHashTable {
-	cht := New()
+	cht := NewCHT()
 	for i := 0; i < n; i++ {
 		cht.Add(i)
 	}

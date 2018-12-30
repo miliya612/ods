@@ -12,7 +12,7 @@ type ChainedHashTable struct {
 	z, d uint64
 }
 
-func New() *ChainedHashTable {
+func NewCHT() *ChainedHashTable {
 	return &ChainedHashTable{
 		buf: make([]arraystack.ArrayStack, 0),
 		z: rand.Uint64() | uint64(1),
@@ -20,10 +20,13 @@ func New() *ChainedHashTable {
 	}
 }
 
+// Size returns the length of elements in the set
 func (cht *ChainedHashTable) Size() int {
 	return cht.len
 }
 
+// Add adds the given element to the set if it has not been included in it
+// if that is added successfully, return true, otherwise return false
 func (cht *ChainedHashTable) Add(x interface{}) bool {
 	if cht.Find(x) != nil {
 		return false
@@ -36,6 +39,9 @@ func (cht *ChainedHashTable) Add(x interface{}) bool {
 	return true
 }
 
+// Remove removes the given element from the set
+// if that is removed successfully, return that, otherwise return nil
+// O(n/cap(cht.buf)) == O(1)
 func (cht *ChainedHashTable) Remove(x interface{}) interface{} {
 	if cht.len == 0 {
 		return nil
@@ -52,6 +58,9 @@ func (cht *ChainedHashTable) Remove(x interface{}) interface{} {
 	return nil
 }
 
+// Find seeks and returns the given element in the set
+// If that is found, return that, otherwise return nil
+// O(n/cap(cht.buf)) == O(1)
 func (cht ChainedHashTable) Find(x interface{}) *interface{} {
 	if cht.len == 0 {
 		return nil
