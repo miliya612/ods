@@ -13,5 +13,5 @@ type USet interface {
 	Remove(interface{}) interface{}
 	// Find seeks and returns the given element in the set
 	// If that is found, return that, otherwise return nil
-	Find(interface{}) interface{}
+	Find(interface{}) *interface{}
 }

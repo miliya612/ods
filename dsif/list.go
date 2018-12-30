@@ -2,7 +2,7 @@ package dsif
 
 type List interface {
 	Size() int
-	Get(i int) interface{}
+	Get(i int) *interface{}
 	Set(i int, x interface{}) interface{}
 	Add(i int, x interface{})
 	Remove(i int) interface{}
