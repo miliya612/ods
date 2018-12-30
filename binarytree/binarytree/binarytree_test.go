@@ -2,7 +2,7 @@ package binarytree
 
 import "testing"
 
-func sample_bt() *BinaryTree {
+func dummyBT() *BinaryTree {
 	n1 := newNode()
 	n2 := newNode()
 	n3 := newNode()
@@ -21,7 +21,7 @@ func sample_bt() *BinaryTree {
 }
 
 func TestDepth(t *testing.T) {
-	bt := sample_bt()
+	bt := dummyBT()
 
 	r := bt.r
 	tests := []struct {
@@ -41,13 +41,25 @@ func TestDepth(t *testing.T) {
 }
 
 func TestSize(t *testing.T) {
-	bt := sample_bt()
+	bt := dummyBT()
 	if ret := bt.Size(); ret != 4 {
 		t.Errorf("bt.Size = %v", ret)
 	}
 }
-func Test_size_subtree(t *testing.T) {
-	bt := sample_bt()
+
+func TestHeight(t *testing.T) {
+	bt := dummyBT()
+	if ret := bt.Height(); ret != 2 {
+		t.Errorf("bt.Height() = %v", ret)
+	}
+}
+
+/**
+ * Recursive implementation
+ */
+
+func Test_recSize(t *testing.T) {
+	bt := dummyBT()
 
 	r := bt.r
 	tests := []struct {
@@ -66,14 +78,9 @@ func Test_size_subtree(t *testing.T) {
 		}
 	}
 }
-func TestHeight(t *testing.T) {
-	bt := sample_bt()
-	if ret := bt.Height(); ret != 2 {
-		t.Errorf("bt.Height() = %v", ret)
-	}
-}
-func Test_height_subtree(t *testing.T) {
-	bt := sample_bt()
+
+func Test_recHeight(t *testing.T) {
+	bt := dummyBT()
 
 	r := bt.r
 	tests := []struct {
@@ -87,7 +94,52 @@ func Test_height_subtree(t *testing.T) {
 	}
 	for _, test := range tests {
 		if ret := (test.arg).recHeight(); ret != test.expected {
-			t.Errorf("height_subtree(%v) = %v", test.arg, ret)
+			t.Errorf("recHeight(%v) = %v", test.arg, ret)
+		}
+	}
+}
+
+/**
+ * Un-recursive implementation with pre-order search
+ */
+
+func Test_poSize(t *testing.T) {
+	bt := dummyBT()
+
+	r := bt.r
+	tests := []struct {
+		arg      *node
+		expected int
+	}{
+		{r, 4},
+		{r.left, 2},
+		{r.right, 1},
+		{r.left.right, 1},
+		{r.left.left, 0},
+	}
+	for _, test := range tests {
+		if ret := (test.arg).poSize(); ret != test.expected {
+			t.Errorf("poSize(%v) = %v", test.arg, ret)
+		}
+	}
+}
+
+func Test_poHeight(t *testing.T) {
+	bt := dummyBT()
+
+	r := bt.r
+	tests := []struct {
+		arg      *node
+		expected int
+	}{
+		{r, 2},
+		{r.left, 1},
+		{r.right, 0},
+		{r.left.right, 0},
+	}
+	for _, test := range tests {
+		if ret := (test.arg).poHeight(); ret != test.expected {
+			t.Errorf("poHeight(%v) = %v", test.arg, ret)
 		}
 	}
 }
