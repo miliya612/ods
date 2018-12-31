@@ -1,13 +1,12 @@
 package binarysearchtree
 
 import (
-	"github.com/spinute/ods-go/utils"
 	"testing"
 )
 
 func TestNew(t *testing.T) {
-	if ret := NewBST().n; ret != 0 {
-		t.Errorf("BinarySearchTree.NewBST().n = %v", ret)
+	if ret := NewBST().len; ret != 0 {
+		t.Errorf("BinarySearchTree.NewBST().len = %v", ret)
 	}
 }
 
@@ -17,8 +16,8 @@ func TestAdd(t *testing.T) {
 
 	for i := 0; i < n; i++ {
 		ret := bst.Add(i)
-		if bst.n != i+1 {
-			t.Errorf("bst.n = %v at %v th Add", bst.n, i+1)
+		if bst.len != i+1 {
+			t.Errorf("bst.len = %v at %v th Add", bst.len, i+1)
 		}
 		if ret == false {
 			t.Errorf("Add returned false unexpectedly")
@@ -26,9 +25,9 @@ func TestAdd(t *testing.T) {
 	}
 
 	for i := 0; i < n; i++ {
-		ret := bst.Add(utils.V(i))
-		if bst.n != n {
-			t.Errorf("bst.n = %v", bst.n)
+		ret := bst.Add(i)
+		if bst.len != n {
+			t.Errorf("bst.len = %v", bst.len)
 		}
 		if ret == true {
 			t.Errorf("Add returned true unexpectedly")
@@ -41,7 +40,7 @@ func TestFindEQ(t *testing.T) {
 	bst := NewBST()
 
 	for i := 0; i < n; i++ {
-		ret := bst.FindEQ(i)
+		ret := bst.findEQ(i)
 		if ret == true {
 			t.Errorf("Add returned non-nil unexpectedly, ret=%v", ret)
 		}
@@ -49,13 +48,13 @@ func TestFindEQ(t *testing.T) {
 
 	for i := 0; i < n; i++ {
 		bst.Add(i)
-		ret := bst.FindEQ(i)
+		ret := bst.findEQ(i)
 		if ret == false {
 			t.Errorf("Add returned nil unexpectedly")
 		}
 	}
 
-	ret := bst.FindEQ(n + 123)
+	ret := bst.findEQ(n + 123)
 	if ret == true {
 		t.Errorf("Add returned nil unexpectedly")
 	}
