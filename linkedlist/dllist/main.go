@@ -5,6 +5,7 @@ type node struct {
 	prev, next *node
 }
 
+// NewNode returns a new node includes given element
 func NewNode(x interface{}) *node {
 	return &node{
 		x:    x,
@@ -32,7 +33,7 @@ func NewDLList() *DLList {
 
 /*
 	List interface
- */
+*/
 
 func (dl *DLList) Size() int {
 	return dl.len
@@ -62,7 +63,7 @@ func (dl *DLList) Remove(i int) interface{} {
 
 /*
 	Queue interface(FIFO)
- */
+*/
 
 func (dl *DLList) Enqueue(x interface{}) {
 	dl.Add(dl.len, x)
@@ -74,7 +75,7 @@ func (dl *DLList) Dequeue() interface{} {
 
 /*
 	Stack interface(LIFO)
- */
+*/
 
 func (dl *DLList) Push(x interface{}) {
 	dl.Add(dl.len, x)
